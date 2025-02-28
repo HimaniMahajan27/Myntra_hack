@@ -1,4 +1,3 @@
-Here’s a **README.md** file for your **Luna – AI Fashion Stylist** project, optimized for GitHub:  
 
 ---
 
