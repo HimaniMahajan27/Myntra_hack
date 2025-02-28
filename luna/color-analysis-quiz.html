@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skin Undertone & Seasonal Palette Quiz</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .quiz-container, .result-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .quiz-container {
+      opacity: 1;
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .question {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .question-image {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .option {
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      font-size: 1rem;
+    }
+
+    .option:hover {
+      background: #007bff;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #007bff;
+      border-radius: 5px;
+      transition: width 0.5s ease-in-out;
+    }
+
+    /* Super Large Result Container */
+.resultContainer {
+    max-width: 1200px; /* Increased width significantly */
+    width: 95%;
+    padding: 50px; /* More padding for a spacious look */
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+    transform: scale(1);
+}
+
+/* Reduce the size of the main result image */
+.result-image-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.result-image {
+    width: 200px;  /* Match suggested color images */
+    height: 200px; /* Make it square like suggested images */
+    object-fit: cover; /* Ensure proper fit */
+    border-radius: 15px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+.result-image:hover {
+    transform: scale(1.1);
+}
+
+/* Suggested colors section remains the same */
+.suggested-colors-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 50px;
+}
+
+/* Suggested color images */
+.suggested-color-image {
+    width: 200px; 
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+.suggested-color-image:hover {
+    transform: scale(1.2);
+}
+
+/* Smooth fade effect */
+#resultContainer {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container" id="quizBox">
+    <div class="progress-bar"><div class="progress-bar-fill" id="progress"></div></div>
+    <img src="" id="questionImage" class="question-image" style="display:none;">
+    <div class="question" id="questionText"></div>
+    <div class="options" id="optionsContainer"></div>
+  </div>
+
+  <div class="result-container" id="resultContainer">
+    
+
+    <div class="result-heading" id="undertone-result"></div>
+    <h3>Suggested Colors:</h3>
+    <div class="color-suggestions" id="suggested-colors"></div>
+    <div class="outfit-container" id="outfitPreview"></div>
+    <div id="resultImage" class="result-image-container"></div>
+    <div id="resultImage" class="result-image-container"></div>
+
+
+<div id="outfitPreview" class="suggested-colors-container"></div>
+
+  </div>
+
+  <script>
+    const quizData = [
+       {
+        question: "What color are the veins on your wrist?",
+        image: "https://cdn.shopify.com/s/files/1/0569/6048/3477/files/ScreenShot2018-08-23at9.47.12AM_480x480.png?v=1622830354",
+        options: ["Blue or Purple", "Green", "Blue-Green Mix", "Olive or Hard to Tell"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "Which colors look best on you?",
+        image: "assets/img/undertone-color/cool_shades.jpg",
+        options: ["Cool shades (blue, purple, silver)", "Warm shades (gold, red, orange)", "Balanced shades (peach, beige, teal)", "Earthy tones (mustard, olive, brown)"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "What is your natural hair color?",
+        image: "assets/img/undertone-color/hair_color.jpg",
+        options: ["Black/Brown with Ashy tones", "Golden Brown/Red", "Medium Ash Brown or Dirty Blonde", "Deep Brown/Muted Black"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "What is your eye color?",
+        image: "assets/img/undertone-color/eye-color.jpg ",
+        options: ["Blue, Gray, Light Green", "Amber, Golden Brown, Hazel", "Hazel, Medium Brown", "Dark Brown, Deep Green"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "Which colors make you look washed out or dull?",
+        image: "assets/img/undertone-color/warm-cool-color-palatte.jpeg",
+        options: ["Warm shades like orange and yellow", "Cool shades like blue and purple", "Bright colors like neon shades", "Pastels or dusty shades"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "Which jewelry suits you better?",
+        image: "assets/img/undertone-color/silver.jpg", 
+        options: ["Silver", "Gold", "Both look great", "Antique Gold/Muted Tones"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      },
+      {
+        question: "How do you react to the sun?",
+        image: "assets/img/undertone-color/skin_under_sun.jpg",
+        options: ["Burns easily, never tans", "Tans quickly, never burns", "Burns first, then tans", "Tans slowly but rarely burns"],
+        values: ["Cool", "Warm", "Neutral", "Olive"]
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let scores = { Cool: 0, Warm: 0, Neutral: 0, Olive: 0 };
+
+    function loadQuestion() {
+      if (currentQuestionIndex < quizData.length) {
+        document.getElementById("progress").style.width = ((currentQuestionIndex / quizData.length) * 100) + "%";
+        const questionData = quizData[currentQuestionIndex];
+        document.getElementById("questionText").innerText = questionData.question;
+
+        const questionImage = document.getElementById("questionImage");
+        questionImage.src = questionData.image;
+        questionImage.style.display = "block";
+
+        const optionsContainer = document.getElementById("optionsContainer");
+        optionsContainer.innerHTML = "";
+
+        questionData.options.forEach((optionText, index) => {
+          const button = document.createElement("div");
+          button.classList.add("option");
+          button.innerText = optionText;
+          button.onclick = () => selectOption(questionData.values[index]);
+          optionsContainer.appendChild(button);
+        });
+      } else {
+        showResult();
+      }
+    }
+
+    function selectOption(value) {
+      scores[value]++;
+      document.getElementById("quizBox").classList.add("hidden");
+      setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+          loadQuestion();
+          document.getElementById("quizBox").classList.remove("hidden");
+        } else {
+          showResult();
+        }
+      }, 800);
+    }
+
+    function showResult() {
+    let finalResult = Object.keys(scores).reduce((a, b) => (scores[a] > scores[b] ? a : b));
+
+    document.getElementById("undertone-result").innerText = `Your Undertone: ${finalResult}`;
+
+    let colorSuggestions = {
+        Cool: "Best colors: Silver, Blue, True Red, Violet",
+        Warm: "Best colors: Gold, Mustard Yellow, Olive Green, Orange, Peach",
+        Neutral: "Best colors: Soft Peach, Teal, Muted Pink, Beige",
+        Olive: "Best colors: Burgundy,Orange, Earthy Brown, Deep Green"
+    };
+
+    let resultImages = {
+        Cool: "assets/img/undertone-color/cool_shades.jpg",
+        Warm: "assets/img/undertone-color/warm-shades.jpg",
+        Neutral: "assets/img/undertone-color/balanced_shades.jpg",
+        Olive: "assets/img/undertone-color/earthy-tones.jpg"
+    };
+
+    let suggestedImages = {
+      Cool: [ "assets/img/undertone-color/royal-blue.jpg","assets/img/undertone-color/true-red.jpg", "assets/img/undertone-color/violet.jpg"],
+        Warm: [ "assets/img/undertone-color/mustard_yellow.jpg ", "assets/img/undertone-color/olive_green.jpg", "assets/img/undertone-color/terracotta.jpeg"],
+        Neutral: ["assets/img/undertone-color/teal.jpeg","assets/img/undertone-color/dark_plum.jpg","assets/img/undertone-color/rose.jpeg" ],
+        Olive: ["assets/img/undertone-color/burgundy.jpeg", "assets/img/undertone-color/ORANGE.jpeg","assets/img/undertone-color/forest_green.jpeg"]
+    };
+
+    document.getElementById("suggested-colors").innerText = colorSuggestions[finalResult];
+
+    // Add main undertone image
+    let resultImageContainer = document.getElementById("resultImage");
+    resultImageContainer.innerHTML = ""; // Clear previous content
+    let resultImg = document.createElement("img");
+    resultImg.src = resultImages[finalResult];
+    resultImg.classList.add("result-image");
+    resultImageContainer.appendChild(resultImg);
+
+    // Add multiple suggested color images
+    let outfitContainer = document.getElementById("outfitPreview");
+    outfitContainer.innerHTML = ""; // Clear previous images
+
+    suggestedImages[finalResult].forEach(imgUrl => {
+        let img = document.createElement("img");
+        img.src = imgUrl;
+        img.classList.add("suggested-color-image");
+        outfitContainer.appendChild(img);
+    });
+
+    // Smooth transition for better UX
+    setTimeout(() => {
+        document.getElementById("quizBox").style.opacity = "0";
+        setTimeout(() => {
+            document.getElementById("quizBox").style.display = "none";
+            document.getElementById("resultContainer").style.display = "block";
+            document.getElementById("resultContainer").style.opacity = "1";
+        }, 500);
+    }, 300);
+}
+
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>

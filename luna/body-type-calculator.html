@@ -1,0 +1,176 @@
+<!-- Testimonials Section -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><h6>Body Type Calculator</h6></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;font-weight: bold;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .calculator-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .calculator-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .calculator-form {
+      flex: 1;
+      min-width: 300px;
+      margin-right: 20px;
+    }
+    .calculator-image {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .calculator-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+  .form-group label {
+    flex: 1;
+    margin-right: 10px;
+  }
+  .form-group input[type="number"],
+  .form-group input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .form-group input[type="number"] {
+    flex: 2;
+    margin-right: 10px;
+  }
+  .form-group input[type="text"] {
+    flex: 1;
+  }
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .button-group button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  .button-group button:hover {
+    background-color: #0056b3;
+  }
+  #bodyTypeResult {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+<section id="body-type-calculator" class="calculator section">
+  <div class="calculator-box">
+    <h2>Body Type Calculator</h2>
+    <p>Discover your body type with our simple calculator!</p>
+    <div class="calculator-wrapper">
+      <div class="calculator-form">
+        <form id="bodyCalcForm">
+          <div class="form-group">
+            <label for="bust">Bust Size:</label>
+            <input type="number" id="bust" name="bust" placeholder="Enter bust" required>
+            <input type="text" id="bust-unit" value="inches" readonly>
+          </div>
+          <div class="form-group">
+            <label for="waist">Waist Size:</label>
+            <input type="number" id="waist" name="waist" placeholder="Enter waist" required>
+            <input type="text" id="waist-unit" value="inches" readonly>
+          </div>
+          <div class="form-group">
+            <label for="highwaist">High Waist Size:</label>
+            <input type="number" id="highwaist" name="highwaist" placeholder="Enter high waist" required>
+            <input type="text" id="highwaist-unit" value="inches" readonly>
+          </div>
+          <div class="form-group">
+            <label for="hips">Hip Size:</label>
+            <input type="number" id="hips" name="hips" placeholder="Enter hips" required>
+            <input type="text" id="hips-unit" value="inches" readonly>
+          </div>
+          <div class="button-group">
+            <button type="button" onclick="calculateBodyType()">Calculate</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+          </div>
+        </form>
+        <div id="bodyTypeResult"></div>
+      </div>
+      <div class="calculator-image">
+        <img src="assets\img\body-measure.png" alt="Body Type Illustration">
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function calculateBodyType() {
+    const bust = parseFloat(document.getElementById("bust").value);
+    const waist = parseFloat(document.getElementById("waist").value);
+    const highWaist = parseFloat(document.getElementById("highwaist").value);
+    const hips = parseFloat(document.getElementById("hips").value);
+    let result = "";
+
+    if (isNaN(bust) || isNaN(waist) || isNaN(highWaist) || isNaN(hips)) {
+      result = "Please fill in all measurements.";
+    } else {
+      
+      // Conditions for other body types
+        if ((hips - bust) >= 3.6 && (hips - waist) < 9) { 
+        result = "Your body type is: Pear";
+      } else if ((bust - hips)>= 3.6 && (bust - waist) < 9) { 
+        result = "Your body type is: Apple";
+      } else if (Math.abs(bust - hips) <= 2) {
+        result = "Your body type is: Hourglass";
+      } else if ((hips - bust) < 3.6 && (bust - hips) < 3.6 && (bust - waist) < 9 && (hips - waist) < 10 ){
+        result = "Your body type is: Rectangle";
+      } else if ((hips - bust) >= 3.6 && (hips - bust) < 10 && (hips - waist) >= 9 && (highWaist/waist) < 1.193){
+        result= "Your body type is: Bottom Hourglass";
+      } else if ((bust - hips) > 1 && (bust - hips) < 10 && (bust - waist) >=9){
+        result= "Your body type is: Top Hourglass" ;
+      } else if ((hips - bust) > 2 && (hips - waist)>= 7 && (highWaist/waist) >=1.193){
+        result= "Your body typeis : Spoon";
+      } else {
+        result= "Please enter correct measurements for accurate result! " ;
+      }
+    }
+    document.getElementById("bodyTypeResult").innerText =  result;
+  }
+
+  function clearForm() {
+    document.getElementById("bodyCalcForm").reset();
+    document.getElementById("bodyTypeResult").innerText = "";
+  }
+</script>
+</body>
+</html>
+
+<!-- /Testimonials Section -->
