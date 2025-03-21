@@ -5,6 +5,7 @@
 
 Luna is an AI-powered fashion stylist that provides **personalized outfit recommendations, body type analysis, and color analysis** based on user preferences. With an interactive chatbot and seamless e-commerce integration, Luna enhances the shopping experience by offering real-time fashion advice.  
 
+![Image](https://github.com/user-attachments/assets/15ae45b5-0b9d-4ce4-942a-8436a963a97c)
 ---
 
 ## **Features**  
